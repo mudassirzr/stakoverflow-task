@@ -40,5 +40,31 @@
     font-weight: 100;
   }
 .ReactVirtualized__Table__row:nth-of-type(2n+1) {
-  background: #dadada
+  background: #ebebeb
+}
+.ReactVirtualized__Table__row {
+  cursor: pointer;
+}
+.ReactVirtualized__Table__row:hover {
+  background-color: #dadada;
+}
+.modal-header {
+  text-align: right;
+}
+.modal-header a {
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.modal-content h2 {
+  border-bottom: 1px solid #dadada;
+  padding-bottom: 1rem
+}
+.modal-content pre {
+	background: #282c34;
+	color: #fff;
+	padding: 1rem;
+	border-radius: 0.5rem;
+}
+.Overlay {
+  background: hsla(0, 0%, 0%, 0.5)
 }
