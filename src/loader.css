@@ -54,6 +54,7 @@
 .modal-header a {
   cursor: pointer;
   font-size: 1.5rem;
+  text-decoration: none;
 }
 .modal-content h2 {
   border-bottom: 1px solid #dadada;

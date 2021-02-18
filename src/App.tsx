@@ -159,7 +159,7 @@ export default function App() {
         <div className="modal-content">
           <h2>{selectedItem?.title}</h2>
           <div dangerouslySetInnerHTML={{__html: selectedItem?.body?selectedItem.body:''}}/>
-          <a title="Open in new tab" target="__blank" href={selectedItem?.link}>Open on Stackoverflow &#8599;</a>
+          <a rel="noreferrer noopener" title="Open in new tab" target="__blank" href={selectedItem?.link}>Open on Stackoverflow &#8599;</a>
         </div>
         
       </Modal>
