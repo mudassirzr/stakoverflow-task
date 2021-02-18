@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { InfiniteLoader, Table, Column, AutoSizer } from "react-virtualized";
-import Modal from 'react-modal'
+import Modal from "react-modal";
 import "react-virtualized/styles.css";
 import "./loader.css";
 import axios from "axios";
@@ -39,7 +39,9 @@ export default function App() {
   const [list, setList] = useState<ListValue>();
   const [page, setPage] = useState(1);
   const [rowCount, setRowCount] = useState<number>(10);
-  const [selectedItem, setSelectedItem] = useState<ListItemBodyValue | undefined>()
+  const [selectedItem, setSelectedItem] = useState<
+    ListItemBodyValue | undefined
+  >();
   interface RowLoadValue {
     index: number;
   }
@@ -68,7 +70,7 @@ export default function App() {
               author: item.owner.display_name,
               title: item.title,
               creation_date: getLocaleStringFromEpoch(item.creation_date),
-              question_id: item.question_id
+              question_id: item.question_id,
             };
           });
           setList({ ...list, ...newItems });
@@ -94,21 +96,19 @@ export default function App() {
           }?key=${API_KEY}&filter=withbody&site=stackoverflow`
       )
       .then(function (response) {
-          console.log()
-          const {title, body, link} = response.data.items[0]
-          setSelectedItem(
-            {
-              title: title,
-              body: body,
-              link: link,
-            }
-          )
+        console.log();
+        const { title, body, link } = response.data.items[0];
+        setSelectedItem({
+          title: title,
+          body: body,
+          link: link,
+        });
       })
       .catch(function (error) {
         console.log(error);
       });
   };
-  Modal.setAppElement('body')
+  Modal.setAppElement("body");
   return (
     <div>
       <InfiniteLoader
@@ -147,21 +147,39 @@ export default function App() {
       </InfiniteLoader>
       <Modal
         isOpen={!!selectedItem}
-        onRequestClose={()=>setSelectedItem(undefined)}
+        onRequestClose={() => setSelectedItem(undefined)}
         contentLabel="Example Modal"
-        style={{overlay: {
-          backgroundColor: 'rgba(0,0,0,0.6)'
-        }}}
+        style={{
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.6)",
+          },
+        }}
       >
         <div className="modal-header">
-          <a href="#" title="Close Modal" onClick={()=>setSelectedItem(undefined)}>X</a>
+          <a
+            href="#"
+            title="Close Modal"
+            onClick={() => setSelectedItem(undefined)}
+          >
+            X
+          </a>
         </div>
         <div className="modal-content">
           <h2>{selectedItem?.title}</h2>
-          <div dangerouslySetInnerHTML={{__html: selectedItem?.body?selectedItem.body:''}}/>
-          <a rel="noreferrer noopener" title="Open in new tab" target="__blank" href={selectedItem?.link}>Open on Stackoverflow &#8599;</a>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: selectedItem?.body ? selectedItem.body : "",
+            }}
+          />
+          <a
+            rel="noreferrer noopener"
+            title="Open in new tab"
+            target="__blank"
+            href={selectedItem?.link}
+          >
+            Open on Stackoverflow &#8599;
+          </a>
         </div>
-        
       </Modal>
     </div>
   );
