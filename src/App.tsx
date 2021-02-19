@@ -11,6 +11,7 @@ import {
 import QuestionDetails from "./components/QuestionDetails";
 import { QuestionItem } from "./components/types";
 import { getQuestions } from "./components/api";
+import Loader from "./components/Loader";
 export default function App() {
   const pageSize = 100;
   const [questionList, setQuestionList] = useState<QuestionItem[]>();
@@ -60,6 +61,7 @@ export default function App() {
   }, [questionList]);
   return (
     <div className="table-wrapper">
+      {!questionList && <Loader />}
       <h1 className="main-heading">Questions from StackOverflow:</h1>
       <p className="help-text">
         <em>(Click a row to view question details)</em>
