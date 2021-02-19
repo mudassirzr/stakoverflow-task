@@ -1,9 +1,9 @@
+import "react-virtualized/styles.css";
 import { useState } from "react";
 import { InfiniteLoader, Table, Column, AutoSizer } from "react-virtualized";
 import Modal from "react-modal";
-import "react-virtualized/styles.css";
-import "./loader.css";
 import axios from "axios";
+import "./loader.css";
 export default function App() {
   interface LoadMoreValue {
     startIndex: number;
@@ -155,13 +155,12 @@ export default function App() {
         }}
       >
         <div className="modal-header">
-          <a
-            href="#"
+          <button
             title="Close Modal"
             onClick={() => setSelectedItem(undefined)}
           >
             X
-          </a>
+          </button>
         </div>
         <div className="modal-content">
           <h2>{selectedItem?.title}</h2>
