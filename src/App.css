@@ -1,38 +1,101 @@
-.App {
-  text-align: center;
+.List {
+  width: 100%;
+  border: 1px solid #ddd;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.App-link {
-  color: #61dafb;
+.placeholder {
+  display: inline-block;
+  height: 1em;
+  background-color: #ddd;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.cacheButtonAndCountRow {
+  display: flex;
+  align-items: center;
+}
+.button {
+  flex: 0 0 auto;
+  background-color: #4db6ac;
+  color: #fff;
+  appearance: none;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 0.35em;
+  font-size: 1em;
+}
+.cacheCountRow {
+  flex: 1 1 auto;
+  text-align: right;
+  color: #bdbdbd;
+  font-size: 0.75em;
+  font-weight: 100;
+}
+.ReactVirtualized__Table__row:nth-of-type(2n + 1) {
+  background: #ebebeb;
+}
+.ReactVirtualized__Table__row {
+  cursor: pointer;
+}
+.ReactVirtualized__Table__row:hover {
+  background-color: #dadada;
+}
+.modal-overlay {
+  position: fixed;
+  background: hsla(0, 0%, 0%, 0.5);
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.modal-box {
+  max-width: 1024px;
+  max-height: calc(100vh - 10rem);
+  min-height: 50vh;
+  margin: 5rem auto;
+  border-radius: 1rem;
+  border: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.modal-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 1rem;
+  border-bottom: 1px solid #dadada;
+}
+.modal-header button {
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  position: absolute;
+  right: 1rem;
+  top: 1.2rem;
+  background: #fff;
+  border: 0;
+}
+.modal-header h2 {
+  margin: 0;
+}
+.modal-content {
+  padding: 2rem;
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
+}
+.modal-content pre {
+  background: #282c34;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
