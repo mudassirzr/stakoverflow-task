@@ -1,34 +1,28 @@
 import "react-virtualized/styles.css";
+import "./loader.css";
 import { useState } from "react";
 import { InfiniteLoader, Table, Column, AutoSizer } from "react-virtualized";
 import Modal from "react-modal";
 import axios from "axios";
-import "./loader.css";
+import { getLocaleStringFromEpoch } from "./components/utils";
 export default function App() {
-  interface LoadMoreValue {
-    startIndex: number;
-    stopIndex: number;
-  }
-  interface OwnerValue {
-    display_name: string;
-  }
-  interface ItemValue {
-    owner: OwnerValue;
+  interface ApiResponse {
+    owner: { display_name: string };
     title: string;
     creation_date: number;
     question_id: number;
     link: string;
   }
-  interface ListItemValue {
+  interface QuestionItem {
     author: string;
     title: string;
     creation_date: string;
     question_id: number;
   }
-  interface ListValue {
-    [key: number]: ListItemValue;
+  interface QuestionList {
+    [key: number]: QuestionItem;
   }
-  interface ListItemBodyValue {
+  interface QuestionDetails {
     title: string;
     body: string;
     link: string;
@@ -37,23 +31,22 @@ export default function App() {
   const API_KEY = "U4DMV*8nvpm3EOpvf69Rxw((";
   const rowCount = 10;
   const pageSize = 100;
-  const [list, setList] = useState<ListValue>();
+  const [list, setList] = useState<QuestionList>();
   const [page, setPage] = useState(1);
   const [selectedItem, setSelectedItem] = useState<
-    ListItemBodyValue | undefined
+    QuestionDetails | undefined
   >();
-  interface RowLoadValue {
-    index: number;
-  }
-  const isRowLoaded = function ({ index }: RowLoadValue): boolean {
-    // !(index in list)
+  const isRowLoaded = function ({ index }: { index: number }): boolean {
     return !!list && !!(index in list!);
   };
   // Converts EPOCH time stamp to local time
-  const getLocaleStringFromEpoch = (time: number) => {
-    return new Date(new Date(0).setUTCSeconds(time)).toLocaleDateString();
-  };
-  const loadMoreRows = ({ startIndex, stopIndex }: LoadMoreValue) => {
+  const fetchMoreRows = ({
+    startIndex,
+    stopIndex,
+  }: {
+    startIndex: number;
+    stopIndex: number;
+  }) => {
     let currentPage =
       startIndex === 0 ? 1 : (Math.ceil(startIndex / 100) * 100) / pageSize + 1;
     if (currentPage === 1 || currentPage !== page) {
@@ -64,8 +57,8 @@ export default function App() {
             `?key=${API_KEY}&order=desc&sort=activity&site=stackoverflow&&page=${currentPage}&pagesize=${pageSize}`
         )
         .then(function (response) {
-          let newItems: ListValue = {};
-          response.data.items.forEach((item: ItemValue, key: number) => {
+          let newItems: QuestionList = {};
+          response.data.items.forEach((item: ApiResponse, key: number) => {
             newItems[key + currentPage * pageSize - pageSize] = {
               author: item.owner.display_name,
               title: item.title,
@@ -83,8 +76,8 @@ export default function App() {
   };
   const rowRenderer = ({ index }: { index: number }) => {
     return list && !!(index in list!)
-      ? { index: index, ...list![index] }
-      : { index: "", author: "loading..", title: "" };
+      ? { ...list![index] }
+      : { author: "loading..", title: "" };
   };
   const onRowClick = ({ index }: { index: number }) => {
     axios
@@ -112,7 +105,7 @@ export default function App() {
     <div>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
-        loadMoreRows={loadMoreRows}
+        loadMoreRows={fetchMoreRows}
         rowCount={!!list ? Object.keys(list!).length + 1 : rowCount}
         threshold={70}
       >
@@ -131,7 +124,7 @@ export default function App() {
                 minimumBatchSize={pageSize}
                 onRowClick={onRowClick}
               >
-                <Column label="S.No." dataKey="index" width={0.1 * width} />
+                {/* <Column label="S.No." dataKey="index" width={0.1 * width} /> */}
                 <Column label="Author" dataKey="author" width={0.2 * width} />
                 <Column label="Title" dataKey="title" width={0.65 * width} />
                 <Column
