@@ -5,7 +5,7 @@ interface DialogProps {
 }
 export default function Dialog({ children, onClose }: DialogProps) {
   return (
-    <div onClick={onClose} className="modal-overlay">
+    <div onClick={onClose} onScroll={(e) => e.stopPropagation()} className="modal-overlay">
       <dialog onClick={(e) => e.stopPropagation()} className="modal-box" open>
         {children}
       </dialog>

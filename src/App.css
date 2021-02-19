@@ -55,6 +55,8 @@
   right: 0;
   left: 0;
   bottom: 0;
+  z-index: 999;
+  overflow: hidden;
 }
 .modal-box {
   max-width: 1024px;
@@ -70,7 +72,7 @@
   position: sticky;
   top: 0;
   background-color: #fff;
-  padding: 1rem;
+  padding: 1.6rem;
   border-bottom: 1px solid #dadada;
 }
 .modal-header button {
@@ -91,6 +93,9 @@
   max-height: calc(100vh - 18rem);
   overflow: auto;
 }
+.modal-content {
+  line-height: 1.5;
+}
 .modal-content pre {
   background: #282c34;
   color: #fff;
@@ -98,4 +103,35 @@
   border-radius: 0.5rem;
   max-width: 100%;
   overflow-x: auto;
+}
+.modal-content img {
+  max-width: 100%;
+}
+:not(pre) > code {
+  background: #e4e6e8;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+}
+.table-wrapper {
+  max-width: 1024px;
+  padding: 1rem;
+  margin: 2rem auto 0;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+.ReactVirtualized__Table__headerRow {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 9;
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+.main-heading {
+  margin: 0 0 0.5rem
+}
+.help-text {
+  margin-top: 0;
+}
+.cell-shimmer {
+  display: block;
+  background: #000;
 }

@@ -11,12 +11,12 @@ export default function questionDetails({
   return (
     <Dialog onClose={() => onClose()}>
       <div className="modal-header">
-        <h2>{selectedQuestion.title}</h2>
         <button title="Close Modal" onClick={() => onClose()}>
           X
         </button>
       </div>
       <div className="modal-content">
+        <h2>{selectedQuestion.title}</h2>
         <div
           dangerouslySetInnerHTML={{
             __html: selectedQuestion.body,

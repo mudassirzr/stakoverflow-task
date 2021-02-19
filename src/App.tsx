@@ -1,12 +1,17 @@
 import "react-virtualized/styles.css";
 import "./App.css";
-import { useState, MouseEvent } from "react";
-import { InfiniteLoader, Table, Column, AutoSizer } from "react-virtualized";
+import { useState, MouseEvent, useCallback } from "react";
+import {
+  InfiniteLoader,
+  Table,
+  Column,
+  WindowScroller,
+  ScrollEventData,
+} from "react-virtualized";
 import QuestionDetails from "./components/QuestionDetails";
 import { QuestionItem } from "./components/types";
 import { getQuestions } from "./components/api";
 export default function App() {
-  const rowCount = 10;
   const pageSize = 100;
   const [questionList, setQuestionList] = useState<QuestionItem[]>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -24,7 +29,9 @@ export default function App() {
     stopIndex: number;
   }) => {
     let newPage =
-      startIndex === 0 ? 1 : (Math.ceil(startIndex / 100) * 100) / pageSize + 1;
+      startIndex === 0
+        ? 1
+        : (Math.ceil(startIndex / pageSize) * pageSize) / pageSize + 1;
     if (newPage === 1 || newPage !== currentPage) {
       setCurrentPage(newPage);
       const newItems = await getQuestions(newPage, pageSize);
@@ -32,21 +39,31 @@ export default function App() {
     }
     return Promise.resolve();
   };
-  const rowRenderer = ({ index }: { index: number }) => {
-    return !!questionList && questionList[index]
-      ? { ...questionList[index] }
-      : { author: "loading..", title: "" };
-  };
-  const onRowClick = ({ index }: { index: number }) => {
-    !!questionList && setSelectedQuestion({ ...questionList[index] });
-  };
-  const getRowCount = (): number => {
+  const rowRenderer = useCallback(
+    ({ index }: { index: number }) => {
+      return !!questionList && questionList[index]
+        ? { ...questionList[index] }
+        : { author: "loading..", title: "" };
+    },
+    [questionList]
+  );
+  const onRowClick = useCallback(
+    ({ index }: { index: number }) => {
+      !!questionList && setSelectedQuestion({ ...questionList[index] });
+    },
+    [questionList]
+  );
+  const getRowCount = useCallback((): number => {
     return !!questionList && questionList.length > 0
       ? questionList.length + 1
-      : rowCount;
-  };
+      : pageSize;
+  }, [questionList]);
   return (
     <div className="table-wrapper">
+      <h1 className="main-heading">Questions from StackOverflow:</h1>
+      <p className="help-text">
+        <em>(Click a row to view question details)</em>
+      </p>
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={fetchMoreRows}
@@ -54,10 +71,21 @@ export default function App() {
         threshold={80}
       >
         {({ onRowsRendered, registerChild }) => (
-          <AutoSizer>
-            {({ width }: { width: number }) => (
+          <WindowScroller>
+            {({
+              height,
+              isScrolling,
+              onChildScroll,
+              scrollTop,
+            }: {
+              height: number;
+              isScrolling: boolean;
+              onChildScroll: (info: ScrollEventData) => void;
+              scrollTop: number;
+            }) => (
               <Table
-                height={500}
+                autoHeight
+                height={height}
                 headerHeight={40}
                 onRowsRendered={onRowsRendered}
                 ref={registerChild}
@@ -66,18 +94,20 @@ export default function App() {
                 rowGetter={rowRenderer}
                 width={1000}
                 minimumBatchSize={pageSize}
+                onScroll={onChildScroll}
+                scrollTop={scrollTop}
                 onRowClick={onRowClick}
               >
-                <Column label="Author" dataKey="author" width={0.2 * width} />
-                <Column label="Title" dataKey="title" width={0.65 * width} />
+                <Column label="Author" dataKey="author" width={200} />
+                <Column label="Title" dataKey="title" width={600} />
                 <Column
                   label="Creation Date"
                   dataKey="creation_date"
-                  width={0.15 * width}
+                  width={150}
                 />
               </Table>
             )}
-          </AutoSizer>
+          </WindowScroller>
         )}
       </InfiniteLoader>
       {!!selectedQuestion && (
