@@ -35,10 +35,10 @@ export default function App() {
   }
   const API_URL = "https://api.stackexchange.com/2.2/questions";
   const API_KEY = "U4DMV*8nvpm3EOpvf69Rxw((";
+  const rowCount = 10;
   const pageSize = 100;
   const [list, setList] = useState<ListValue>();
   const [page, setPage] = useState(1);
-  const [rowCount, setRowCount] = useState<number>(10);
   const [selectedItem, setSelectedItem] = useState<
     ListItemBodyValue | undefined
   >();
@@ -74,7 +74,6 @@ export default function App() {
             };
           });
           setList({ ...list, ...newItems });
-          currentPage === 1 && setRowCount(response.data.quota_max * pageSize);
         })
         .catch(function (error) {
           console.log(error);
@@ -114,8 +113,8 @@ export default function App() {
       <InfiniteLoader
         isRowLoaded={isRowLoaded}
         loadMoreRows={loadMoreRows}
-        rowCount={rowCount}
-        threshold={80}
+        rowCount={!!list ? Object.keys(list!).length + 1 : rowCount}
+        threshold={70}
       >
         {({ onRowsRendered, registerChild }) => (
           <AutoSizer>
@@ -125,7 +124,7 @@ export default function App() {
                 headerHeight={40}
                 onRowsRendered={onRowsRendered}
                 ref={registerChild}
-                rowCount={rowCount}
+                rowCount={!!list ? Object.keys(list!).length + 1 : rowCount}
                 rowHeight={40}
                 rowGetter={rowRenderer}
                 width={1000}
