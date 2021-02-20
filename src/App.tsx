@@ -50,7 +50,7 @@ export default function App() {
   );
   const onRowClick = useCallback(
     ({ index }: { index: number }) => {
-      !!questionList && setSelectedQuestion({ ...questionList[index] });
+      !!questionList && questionList[index] && setSelectedQuestion({ ...questionList[index] });
     },
     [questionList]
   );
